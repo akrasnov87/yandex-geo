@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "YandexGeo": {
+      "commandName": "Project",
+      "commandLineArgs": "\"869301a4-6978-4286-a523-eaf015c0912e\" \"proxy-list.txt\" 10000 1"
+    }
+  }
+}
