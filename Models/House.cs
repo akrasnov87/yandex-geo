@@ -25,6 +25,7 @@ namespace YandexGeo.Models
         public string c_yandex_description { get; set; }
         public string c_yandex_name { get; set; }
         public bool b_yandex { get; set; }
+        public bool b_yandex_fail { get; set; }
         [Column(TypeName = "jsonb")]
         public string jb_yandex_res { get; set; }
     }

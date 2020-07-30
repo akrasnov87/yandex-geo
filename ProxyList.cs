@@ -61,7 +61,15 @@ namespace YandexGeo
                 }
             }
             string txt = builder.ToString();
-            File.WriteAllText(Path, txt.Substring(0, txt.Length - 2));
+            if (txt.Length == 0)
+            {
+                string proxyTxt = File.ReadAllText("proxy.txt");
+                File.WriteAllText(Path, proxyTxt);
+            }
+            else
+            {
+                File.WriteAllText(Path, txt.Substring(0, txt.Length - 2));
+            }
         }
     }
 }

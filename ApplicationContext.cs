@@ -10,6 +10,9 @@ namespace YandexGeo
     {
         public DbSet<Street> Streets { get; set; }
         public DbSet<House> Houses { get; set; }
+
+        public DbSet<TmpHouse> TmpHouses { get; set; }
+
         public ApplicationContext()
         {
             Database.EnsureCreated();
