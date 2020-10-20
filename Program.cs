@@ -25,7 +25,7 @@ namespace YandexGeo
 
         static void Main(string[] args)
         {
-            street(args);
+            house(args);
         }
 
         static void street(string[] args)
@@ -167,7 +167,7 @@ namespace YandexGeo
                         continue;
                     }
 
-                    string houseName = "чувашия " + house.c_street_name + " " + house.c_house_num + (house.c_house_build == null || house.c_house_build.Trim().Length == 0 ? "" : " корп. " + house.c_house_build);
+                    string houseName = "чебоксары " + house.c_street_type + " " + house.c_street_name + " " + house.c_house_num + (house.c_house_build == null || house.c_house_build.Trim().Length == 0 ? "" : " корп. " + house.c_house_build);
                     Console.Write(i + "/" + houses.Count + ": " + houseName + "\r");
 
                     string url = String.Format(URL, API_KEY, houseName);
@@ -184,6 +184,7 @@ namespace YandexGeo
                             myProxy.Count++;
                             var response = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(json);
                             int found = response.response.GeoObjectCollection.metaDataProperty.GeocoderResponseMetaData.found;
+                            int results = response.response.GeoObjectCollection.metaDataProperty.GeocoderResponseMetaData.results;
                             House houseForUpdate = db.Houses.First(t => t.id == house.id);
                             if (found == 1)
                             {
@@ -207,8 +208,41 @@ namespace YandexGeo
                             }
                             else
                             {
-                                houseForUpdate.b_yandex_fail = true;
-                                Console.Write("\r" + i + "/" + houses.Count + ": " + houseName + " FAIL (" + found + ")\n");
+                                Console.WriteLine("\r");
+                                for (int j = 0; j < response.response.GeoObjectCollection.featureMember.Count; j++)
+                                {
+                                    var _featureMember = response.response.GeoObjectCollection.featureMember[j];
+                                    string _description = _featureMember.GeoObject.description;
+                                    string _name = _featureMember.GeoObject.name;
+                                    Console.WriteLine(j + ": " + _description + " " + _name);
+                                }
+                                int idx = int.Parse(Console.ReadLine());
+                                if (idx >= 0)
+                                {
+                                    var featureMember = response.response.GeoObjectCollection.featureMember[idx];
+                                    string description = featureMember.GeoObject.description;
+                                    string name = featureMember.GeoObject.name;
+                                    string geo = featureMember.GeoObject.Point.pos;
+
+                                    double latitude = double.Parse(geo.Split(' ')[1].Replace(".", ",")); // широта
+                                    double longitude = double.Parse(geo.Split(' ')[0].Replace(".", ",")); // долгота
+
+
+                                    houseForUpdate.b_yandex = true;
+                                    houseForUpdate.c_yandex_description = description;
+                                    houseForUpdate.c_yandex_name = name;
+                                    houseForUpdate.n_latitude = latitude;
+                                    houseForUpdate.n_longitude = longitude;
+                                    houseForUpdate.jb_yandex_res = json;
+
+                                    Console.Write("\r" + i + "/" + houses.Count + ": " + houseName + " SUCCESS\n");
+                                }
+                                else
+                                {
+
+                                    houseForUpdate.b_yandex_fail = true;
+                                    Console.Write("\r" + i + "/" + houses.Count + ": " + houseName + " FAIL (" + found + ")\n");
+                                }
                             }
 
                             db.SaveChanges();
