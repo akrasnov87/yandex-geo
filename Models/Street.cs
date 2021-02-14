@@ -18,16 +18,9 @@ namespace YandexGeo.Models
         public string c_name { get; set; }
         public DateTime? dx_date { get; set; }
         public bool? b_disabled { get; set; }
-        public int? f_division { get; set; }
         public string c_short_type { get; set; }
         public int? f_user { get; set; }
         public double? n_latitude { get; set; }
         public double? n_longitude { get; set; }
-        public string c_yandex_description { get; set; }
-        public string c_yandex_name { get; set; }
-        public bool b_yandex { get; set; }
-        public bool b_yandex_fail { get; set; }
-        [Column(TypeName = "jsonb")]
-        public string jb_yandex_res { get; set; }
     }
 }

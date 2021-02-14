@@ -11,8 +11,6 @@ namespace YandexGeo
         public DbSet<Street> Streets { get; set; }
         public DbSet<House> Houses { get; set; }
 
-        public DbSet<TmpHouse> TmpHouses { get; set; }
-
         public ApplicationContext()
         {
             Database.EnsureCreated();
@@ -20,7 +18,7 @@ namespace YandexGeo
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseNpgsql("Host=dev-ws-v-07;Port=5432;Database=vote-dev;Username=mobnius;Password=mobnius-0");
+            optionsBuilder.UseNpgsql("Host=dev-ws-v-07;Port=5432;Database=vote-dev-db;Username=mobnius;Password=mobnius-0");
         }
     }
 }
